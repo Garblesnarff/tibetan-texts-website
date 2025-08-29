@@ -23,9 +23,25 @@ export default defineConfig(({ mode }) => ({
   optimizeDeps: {
     include: ['pdfjs-dist']
   },
+  esbuild: {
+    target: 'es2022'
+  },
+  worker: {
+    format: 'es',
+    plugins: () => []
+  },
   build: {
+    target: 'es2022',
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          pdfjs: ['pdfjs-dist']
+        }
+      }
+    },
     commonjsOptions: {
-      include: [/pdfjs-dist/]
+      include: [/node_modules/],
+      transformMixedEsModules: true
     }
   }
 }));

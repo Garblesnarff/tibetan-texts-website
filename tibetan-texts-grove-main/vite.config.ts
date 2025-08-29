@@ -6,7 +6,7 @@ import { componentTagger } from "lovable-tagger";
 export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
-    port: 8080,
+    port: 8090,
   },
   plugins: [
     react({
@@ -25,11 +25,15 @@ export default defineConfig(({ mode }) => ({
   optimizeDeps: {
     include: ['pdfjs-dist']
   },
+  esbuild: {
+    target: 'es2022'
+  },
   worker: {
     format: 'es',
     plugins: () => []
   },
   build: {
+    target: 'es2022',
     rollupOptions: {
       output: {
         manualChunks: {
