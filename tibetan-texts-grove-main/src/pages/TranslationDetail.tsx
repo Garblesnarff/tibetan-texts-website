@@ -69,7 +69,7 @@ export default function TranslationDetail() {
                 />
               </div>
             )}
-            
+
             {translation.translation_file_path && (
               <div className="w-full min-h-[600px] lg:min-h-[700px]">
                 <PDFViewerEnhanced

@@ -23,7 +23,7 @@ export const useTranslationSave = ({
   ) => {
     try {
       setIsSaving(true);
-      
+
       const { error } = await supabase
         .from('translations')
         .update({
@@ -54,8 +54,40 @@ export const useTranslationSave = ({
     }
   };
 
+  const handleSaveDescription = async (description: string) => {
+    try {
+      setIsSaving(true);
+
+      const { error } = await supabase
+        .from('translations')
+        .update({
+          description: description,
+        })
+        .eq('id', translationId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: "Description updated successfully",
+      });
+
+      onUpdate?.();
+    } catch (error: any) {
+      console.error('Error saving description:', error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to update description",
+      });
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   return {
     handleSave,
+    handleSaveDescription,
     isSaving,
   };
 };

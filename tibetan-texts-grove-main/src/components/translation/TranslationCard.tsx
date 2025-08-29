@@ -52,7 +52,14 @@ const TranslationCard = ({
   const [editedDescription, setEditedDescription] = React.useState(description || '');
   const [isEditingDescription, setIsEditingDescription] = React.useState(false);
 
-  const { handleSave } = useTranslationSave({
+  // Sync editedDescription with description prop when it changes
+  React.useEffect(() => {
+    if (description !== undefined) {
+      setEditedDescription(description);
+    }
+  }, [description]);
+
+  const { handleSave, handleSaveDescription, isSaving } = useTranslationSave({
     translationId,
     onUpdate,
     onEditingChange
@@ -60,6 +67,12 @@ const TranslationCard = ({
 
   const handleSaveClick = async () => {
     await handleSave(editedEnglishTitle, editedTibetanTitle, editedDescription);
+    setIsEditingDescription(false);
+  };
+
+  const handleDescriptionSave = async (newDescription: string) => {
+    await handleSaveDescription(newDescription);
+    setEditedDescription(newDescription);
     setIsEditingDescription(false);
   };
 
@@ -105,7 +118,8 @@ const TranslationCard = ({
           setEditedDescription={setEditedDescription}
           setIsEditingDescription={setIsEditingDescription}
           searchQuery={searchQuery}
-          onUpdate={onUpdate}
+          onSave={handleDescriptionSave}
+          isSaving={isSaving}
         />
       </div>
 

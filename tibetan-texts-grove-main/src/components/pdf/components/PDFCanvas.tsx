@@ -58,8 +58,19 @@ export const PDFCanvas: React.FC<PDFCanvasProps> = ({
         const context = canvas.getContext('2d');
         if (!context) return;
 
+        // Wait for container to have valid dimensions
+        const container = containerRef.current;
+        const containerWidth = container.clientWidth;
+        const containerHeight = container.clientHeight;
+
+        // If container dimensions are not yet available, wait a bit and retry
+        if (containerWidth === 0 || containerHeight === 0) {
+          console.log('Container dimensions not ready, retrying...');
+          setTimeout(() => renderPage(), 100);
+          return;
+        }
+
         // Calculate the scale based on container width if fitting to width
-        const containerWidth = containerRef.current.clientWidth;
         const viewport = page.getViewport({ scale: 1.0 });
         let scale = zoom;
 
@@ -72,8 +83,8 @@ export const PDFCanvas: React.FC<PDFCanvasProps> = ({
         // Get natural rotation from PDF metadata and create viewport
         const naturalRotation = page.rotate || 0;
         console.log('Using natural rotation:', naturalRotation);
-        
-        const scaledViewport = page.getViewport({ 
+
+        const scaledViewport = page.getViewport({
           scale,
           rotation: naturalRotation // Use PDF's natural rotation
         });

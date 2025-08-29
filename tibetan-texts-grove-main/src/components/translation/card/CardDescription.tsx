@@ -1,11 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Pencil, Save, X, Loader2 } from "lucide-react";
 import { highlightText } from "@/utils/highlightText";
 import { useAuth } from "@/hooks/useAuth";
-import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 
 interface CardDescriptionProps {
   translationId: string;
@@ -15,7 +13,8 @@ interface CardDescriptionProps {
   setEditedDescription: (value: string) => void;
   setIsEditingDescription: (value: boolean) => void;
   searchQuery?: string;
-  onUpdate?: () => Promise<void>;
+  onSave?: (description: string) => Promise<void>;
+  isSaving?: boolean;
 }
 
 const CardDescription = ({
@@ -26,38 +25,15 @@ const CardDescription = ({
   setEditedDescription,
   setIsEditingDescription,
   searchQuery,
-  onUpdate
+  onSave,
+  isSaving = false
 }: CardDescriptionProps) => {
   const { isAdmin } = useAuth();
-  const { toast } = useToast();
-  const [isSaving, setIsSaving] = useState(false);
 
   const handleSave = async () => {
-    try {
-      setIsSaving(true);
-      const { error } = await supabase
-        .from('translations')
-        .update({ description: editedDescription })
-        .eq('id', translationId);
-
-      if (error) throw error;
-
-      toast({
-        title: "Success",
-        description: "Description updated successfully",
-      });
-      
-      onUpdate?.();
+    if (onSave) {
+      await onSave(editedDescription);
       setIsEditingDescription(false);
-    } catch (error: any) {
-      console.error('Error updating description:', error);
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to update description",
-      });
-    } finally {
-      setIsSaving(false);
     }
   };
 
@@ -89,7 +65,7 @@ const CardDescription = ({
             size="sm"
             variant="outline"
             onClick={() => {
-              setEditedDescription(description || '');
+              setEditedDescription(displayDescription || '');
               setIsEditingDescription(false);
             }}
             disabled={isSaving}
@@ -102,11 +78,14 @@ const CardDescription = ({
     );
   }
 
+  // Use editedDescription if it exists and is not empty, otherwise use the original description
+  const displayDescription = editedDescription || description;
+
   return (
     <div className="relative">
-      {description ? (
+      {displayDescription ? (
         <p className="text-sm text-muted-foreground">
-          {searchQuery ? highlightText(description, searchQuery) : description}
+          {searchQuery ? highlightText(displayDescription, searchQuery) : displayDescription}
         </p>
       ) : (
         <p className="text-sm text-muted-foreground italic">No description available</p>

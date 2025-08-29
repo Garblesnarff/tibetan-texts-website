@@ -4,10 +4,7 @@ import { PDFDocumentProxy } from 'pdfjs-dist';
 
 // Configure PDF.js worker
 if (typeof window !== 'undefined') {
-  pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
-    'pdfjs-dist/build/pdf.worker.mjs',
-    import.meta.url
-  ).toString();
+  pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js`;
 }
 
 export const usePDFDocument = (url: string) => {
@@ -26,7 +23,7 @@ export const usePDFDocument = (url: string) => {
 
         const loadingTask = pdfjsLib.getDocument({
           url,
-          cMapUrl: 'https://unpkg.com/pdfjs-dist@4.0.379/cmaps/',
+          cMapUrl: 'https://unpkg.com/pdfjs-dist@3.11.174/cmaps/',
           cMapPacked: true,
         });
 
