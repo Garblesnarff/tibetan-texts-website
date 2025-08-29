@@ -37,23 +37,129 @@
   }
   body {
     @apply bg-background text-foreground font-serif;
+    scroll-behavior: smooth;
   }
   .tibetan-text {
     @apply font-tibetan text-lg leading-relaxed;
   }
+
+  /* Focus styles for better accessibility */
+  *:focus-visible {
+    @apply outline-2 outline-offset-2 outline-tibetan-gold;
+  }
+
+  /* Selection styles */
+  ::selection {
+    @apply bg-tibetan-gold/20 text-tibetan-brown;
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-muted/30;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-tibetan-brown/50 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-tibetan-brown/70;
+  }
 }
 
-/* Sidebar Animations */
+/* Enhanced animations and transitions */
 @layer utilities {
   .sidebar-transition {
     @apply transition-all duration-300 ease-in-out;
   }
-  
+
   .sidebar-item-hover {
     @apply hover:bg-accent/50 hover:text-accent-foreground transition-colors duration-200;
   }
-  
+
   .sidebar-item-active {
     @apply bg-accent text-accent-foreground;
+  }
+
+  /* Card hover effects */
+  .card-hover {
+    @apply transition-all duration-200 ease-in-out hover:shadow-lg hover:shadow-tibetan-gold/10 hover:-translate-y-1;
+  }
+
+  /* Button enhancements */
+  .btn-tibetan {
+    @apply bg-gradient-to-r from-tibetan-maroon to-tibetan-brown hover:from-tibetan-maroon/90 hover:to-tibetan-brown/90 text-white shadow-lg hover:shadow-xl transition-all duration-200;
+  }
+
+  /* Text animations */
+  .text-gradient {
+    @apply bg-gradient-to-r from-tibetan-maroon via-tibetan-brown to-tibetan-gold bg-clip-text text-transparent;
+  }
+
+  /* Loading animations */
+  .pulse-tibetan {
+    animation: pulse-tibetan 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes pulse-tibetan {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+
+  /* Fade in animation */
+  .fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Stagger animation for lists */
+  .stagger-fade-in {
+    animation: staggerFadeIn 0.6s ease-out forwards;
+  }
+
+  .stagger-fade-in:nth-child(1) { animation-delay: 0.1s; }
+  .stagger-fade-in:nth-child(2) { animation-delay: 0.2s; }
+  .stagger-fade-in:nth-child(3) { animation-delay: 0.3s; }
+  .stagger-fade-in:nth-child(4) { animation-delay: 0.4s; }
+  .stagger-fade-in:nth-child(5) { animation-delay: 0.5s; }
+  .stagger-fade-in:nth-child(6) { animation-delay: 0.6s; }
+
+  @keyframes staggerFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Glass morphism effect */
+  .glass {
+    @apply bg-background/80 backdrop-blur-md border border-border/50;
+  }
+
+  /* Enhanced focus ring */
+  .focus-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tibetan-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background;
   }
 }
